@@ -1,0 +1,19 @@
+{
+    "name": "@healthcare-scheduling/database",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "dist/src/index.js",
+    "types": "dist/src/index.d.ts",
+    "scripts": {
+        "build": "tsc"
+    },
+    "devDependencies": {
+        "typescript": "^5.2.2"
+    },
+    "dependencies": {
+        "@nestjs/common": "^12.1.2",
+        "@prisma/orm-postgres": "^8.0.0-rc.14",
+        "dotenv": "^18.0.6",
+        "temporal-polyfill": "^1.0.5"
+    }
+}
