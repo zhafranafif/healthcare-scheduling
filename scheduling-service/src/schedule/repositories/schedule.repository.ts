@@ -5,6 +5,7 @@ import { CreateScheduleData, ScheduleRecord } from "../types/schedule.types.js";
 import { PaginationArgs } from "../dto/pagination-args.js";
 import { FilterArgs } from "../dto/filter-args.js";
 import { SchedulePage } from "../model/schedule-page.model.js";
+import { toTemporalInstant } from "../../util/to-temporal.js";
 
 
 @Injectable()
@@ -14,14 +15,17 @@ export class ScheduleRepository {
     ) {}
 
     async createSchedule(data: CreateScheduleData): Promise<ScheduleRecord> {
-        const schedule = await this.prismaService.orm.Schedule.create(data);
+        const schedule = await this.prismaService.orm.Schedule.create({
+            ...data,
+            scheduledAt: toTemporalInstant(data.scheduledAt),
+        });
 
         return {
             id: schedule.id,
             doctorId: schedule.doctorId,
             customerId: schedule.customerId,
             objective: schedule.objective,
-            scheduledAt: schedule.scheduledAt,
+            scheduledAt: convertDate(schedule.scheduledAt),
             createdAt: convertDate(schedule.createdAt),
             updatedAt: convertDate(schedule.updatedAt),
         };
@@ -39,7 +43,7 @@ export class ScheduleRepository {
             doctorId: schedule.doctorId,
             customerId: schedule.customerId,
             objective: schedule.objective,
-            scheduledAt: schedule.scheduledAt,
+            scheduledAt: convertDate(schedule.scheduledAt),
             createdAt: convertDate(schedule.createdAt),
             updatedAt: convertDate(schedule.updatedAt),
         };
@@ -51,7 +55,7 @@ export class ScheduleRepository {
 
     async getAllSchedules(paginationArgs: PaginationArgs, filterArgs: FilterArgs): Promise<SchedulePage> {
         const { page, limit } = paginationArgs;
-        const { doctorId, customerId, scheduledAt, objective } = filterArgs;
+        const { doctorId, customerId, scheduledFrom, scheduledTo, objective } = filterArgs;
 
         const pageNum = page ?? 1;
         const pageLimit = limit ?? 10;
@@ -65,8 +69,11 @@ export class ScheduleRepository {
         if (customerId) {
         baseQuery = baseQuery.where((p) => p.customerId.ilike(`%${customerId}%`));
         }
-        if (scheduledAt) {
-        baseQuery = baseQuery.where((p) => p.scheduledAt.eq(scheduledAt));
+        if (scheduledFrom) {
+        baseQuery = baseQuery.where((p) => p.scheduledAt.gte(toTemporalInstant(scheduledFrom)));
+        }
+        if (scheduledTo) {
+        baseQuery = baseQuery.where((p) => p.scheduledAt.lte(toTemporalInstant(scheduledTo)));
         }
         if (objective) {
         baseQuery = baseQuery.where((p) => p.objective.ilike(`%${objective}%`));
@@ -86,7 +93,7 @@ export class ScheduleRepository {
         doctorId: schedule.doctorId,
         customerId: schedule.customerId,
         objective: schedule.objective,
-        scheduledAt: schedule.scheduledAt,
+        scheduledAt: convertDate(schedule.scheduledAt),
         createdAt: convertDate(schedule.createdAt),
         updatedAt: convertDate(schedule.updatedAt),
         }));

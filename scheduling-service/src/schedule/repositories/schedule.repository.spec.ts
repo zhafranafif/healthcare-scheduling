@@ -1,6 +1,6 @@
 import { PrismaService } from "@healthcare-scheduling/database";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { ScheduleRepository } from "./schedule.repositoy.js";
+import { ScheduleRepository } from "./schedule.repository.js";
 
 vi.mock("@healthcare-scheduling/database", () => ({ PrismaService: class PrismaService {} }));
 

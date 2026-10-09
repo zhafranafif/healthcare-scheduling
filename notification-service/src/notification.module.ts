@@ -16,7 +16,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
     }),
     MailerModule.forRoot({
       transport: {
-        host: '://resend.com',
+        host: 'smtp.resend.com',
         port: 465,
         secure: true,
         auth: {

@@ -31,7 +31,7 @@ export class ScheduleResolver {
     }
 
     @Query(() => SchedulePage)
-    async getAllSchedules(@Args() paginationArgs: PaginationArgs, filterArgs: FilterArgs): Promise<SchedulePage> {
+    async getAllSchedules(@Args() paginationArgs: PaginationArgs, @Args() filterArgs: FilterArgs): Promise<SchedulePage> {
         return this.scheduleService.getAllSchedules(paginationArgs, filterArgs);
     }
 }

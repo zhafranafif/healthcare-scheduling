@@ -9,5 +9,6 @@ import { AuthModule } from "../guard/auth.module.js";
 @Module({
     imports: [PrismaModule, AuthModule],
     providers: [CustomerService, CustomerRepository, CustomerResolver],
+    exports: [CustomerRepository],
 })
 export class CustomerModule {}

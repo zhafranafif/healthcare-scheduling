@@ -42,13 +42,11 @@ export class AuthClient {
     let body: ValidateTokenResponse;
     try {
       body = (await response.json()) as ValidateTokenResponse;
-      console.log('Auth service response:', body);
     } catch {
       throw new UnauthorizedException('Auth service returned an invalid response');
     }
 
     const user = body.data?.validateToken;
-    console.log('Validated user:', user);
     if (!response.ok || body.errors?.length || !user) {
       throw new UnauthorizedException('Invalid or expired token');
     }

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CustomerRepository } from "../../customer/repositories/customer.repository.js";
 import { DoctorRepository } from "../../doctor/repositories/doctor.repository.js";
-import { ScheduleRepository } from "../repositories/schedule.repositoy.js";
+import { ScheduleRepository } from "../repositories/schedule.repository.js";
 import { ScheduleNotificationProducer } from "./schedule-notification.producer.js";
 import { ScheduleService } from "./schedule.service.js";
 

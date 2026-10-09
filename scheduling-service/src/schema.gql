@@ -11,6 +11,13 @@ input CreateDoctorInput {
   name: String!
 }
 
+input CreateScheduleInput {
+  customerId: String!
+  doctorId: String!
+  objective: String!
+  scheduledAt: DateTime!
+}
+
 type Customer {
   createdAt: DateTime!
   email: String!
@@ -56,8 +63,10 @@ type DoctorPageMeta {
 type Mutation {
   createCustomer(createCustomerInput: CreateCustomerInput!): Customer!
   createDoctor(createDoctorInput: CreateDoctorInput!): Doctor!
+  createSchedule(createScheduleInput: CreateScheduleInput!): Schedule!
   deleteCustomer(id: String!): Boolean!
   deleteDoctor(id: String!): Boolean!
+  deleteSchedule(id: String!): Boolean!
   updateCustomer(updateCustomerInput: UpdateCustomerInput!): Customer!
   updateDoctor(updateDoctorInput: UpdateDoctorInput!): Doctor!
 }
@@ -65,9 +74,32 @@ type Mutation {
 type Query {
   getAllCustomers(limit: Int, page: Int): CustomerPage!
   getAllDoctors(limit: Int, page: Int): DoctorPage!
+  getAllSchedules(customerId: String, doctorId: String, limit: Int, objective: String, page: Int, scheduledFrom: DateTime, scheduledTo: DateTime): SchedulePage!
   getCustomerById(id: String!): Customer!
   getDoctorById(id: String!): Doctor!
   getHello: String!
+  getScheduleById(id: String!): Schedule!
+}
+
+type Schedule {
+  createdAt: DateTime!
+  customerId: String!
+  doctorId: String!
+  id: String!
+  objective: String!
+  scheduledAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type SchedulePage {
+  data: [Schedule!]!
+  meta: SchedulePageMeta!
+}
+
+type SchedulePageMeta {
+  limit: Int!
+  page: Int!
+  total: Int!
 }
 
 input UpdateCustomerInput {

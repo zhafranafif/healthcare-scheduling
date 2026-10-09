@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { join } from 'path';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthModule } from './guard/auth.module.js';
 import { GqlAuthGuard } from './guard/gql-auth.guard.js';
@@ -14,7 +13,7 @@ import { ScheduleModule } from './schedule/schedule.module.js';
   imports: [
       GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      autoSchemaFile: true,
       sortSchema: true,
       graphiql: true,
       context: ({ req }: { req: Request }) => ({ req }),

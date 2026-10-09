@@ -1,11 +1,12 @@
 import { MailerService } from "@nestjs-modules/mailer";
 import { Processor, WorkerHost } from "@nestjs/bullmq";
+import { Logger } from "@nestjs/common";
 import { Job } from "bullmq";
 
 
 @Processor('notification-queue')
 export class NotificationConsumer extends WorkerHost {
-
+    private readonly logger = new Logger(NotificationConsumer.name);
     constructor(
         private readonly mailerService: MailerService
     ) {
@@ -28,6 +29,6 @@ export class NotificationConsumer extends WorkerHost {
             subject: subject,
             text: message,
         });
-        console.log(`Sending email to ${email} with subject "${subject}" and message "${message}"`);
+        this.logger.log(`Sending email to ${email} with subject "${subject}" and message "${message}"`);
     }
 }

@@ -16,11 +16,6 @@ export class CustomerResolver {
         private readonly customerService: CustomerService 
     ) {}
 
-    @Query(() => String)
-    getHello(): string {
-        return 'GraphQL server is running.';
-    }
-
     @Mutation(() => Customer)
     async createCustomer(@Args('createCustomerInput') createCustomerInput: CreateCustomerInput): Promise<Customer> {
         return this.customerService.createCustomer(createCustomerInput);

@@ -10,7 +10,10 @@ export class FilterArgs {
     customerId?: string;
 
     @Field(() => Date, { nullable: true })
-    scheduledAt?: Date;
+    scheduledFrom?: Date;
+
+    @Field(() => Date, { nullable: true })
+    scheduledTo?: Date;
     
     @Field(() => String, { nullable: true })
     objective?: string;

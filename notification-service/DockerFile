@@ -1,0 +1,31 @@
+FROM node:24-alpine AS build
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+COPY notification-service/package.json ./notification-service/package.json
+
+RUN npm ci
+
+COPY notification-service ./notification-service
+
+RUN npm run build --workspace=notification-service \
+	&& npm pack --workspace=notification-service --pack-destination /tmp
+
+FROM node:24-alpine
+
+WORKDIR /app
+
+COPY --from=build /tmp/*.tgz /tmp/
+
+RUN npm init --yes \
+	&& npm install --omit=dev /tmp/*.tgz \
+	&& rm -rf /root/.npm /tmp/*.tgz
+
+COPY --from=build /app/notification-service/package.json ./notification-service/package.json
+COPY --from=build /app/notification-service/dist ./notification-service/dist
+
+USER node
+
+CMD ["node", "notification-service/dist/main.js"]
+

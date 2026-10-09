@@ -26,8 +26,6 @@ type Mutation {
 }
 
 type Query {
-  """Placeholder query"""
-  hello: String!
   validateToken(token: String!): Auth!
 }
 

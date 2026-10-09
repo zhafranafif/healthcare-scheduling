@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ScheduleService } from "./services/schedule.service.js";
-import { ScheduleRepository } from "./repositories/schedule.repositoy.js";
+import { ScheduleRepository } from "./repositories/schedule.repository.js";
 import { ScheduleResolver } from "./resolvers/schedule.resolver.js";
 import { PrismaModule } from "@healthcare-scheduling/database";
 import { AuthModule } from "../guard/auth.module.js";

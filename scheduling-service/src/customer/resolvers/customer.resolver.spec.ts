@@ -15,7 +15,6 @@ describe("CustomerResolver", () => {
         resolver = new CustomerResolver(service as CustomerService);
     });
 
-    it("returns the hello message", () => expect(resolver.getHello()).toBe("GraphQL server is running."));
     it("forwards create", async () => {
         const input = { name: customer.name, email: customer.email };
         vi.mocked(service.createCustomer).mockResolvedValue(customer);

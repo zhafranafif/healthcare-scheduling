@@ -9,5 +9,6 @@ import { DoctorService } from "./services/doctor.service.js";
 @Module({
     imports: [PrismaModule, AuthModule],
     providers: [DoctorService, DoctorRepository, DoctorResolver],
+    exports: [DoctorRepository],
 })
 export class DoctorModule {}
