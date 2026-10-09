@@ -10,12 +10,6 @@ export class AuthResolver {
     constructor(
         private readonly authService: AuthService
     ) {}
-    
-    @Query(() => String, { name: 'hello', description: 'Placeholder query' })
-    getHello(): string {
-        return 'GraphQL server is running.';
-    }
-
 
     @Mutation(() => Auth)
     async register(@Args('registerUserInput') registerUserInput: RegisterUserInput)

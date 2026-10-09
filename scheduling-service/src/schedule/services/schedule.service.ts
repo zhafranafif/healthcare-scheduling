@@ -7,6 +7,7 @@ import { ScheduleRepository } from "../repositories/schedule.repositoy.js";
 import { PaginationArgs } from "../dto/pagination-args.js";
 import { FilterArgs } from "../dto/filter-args.js";
 import { SchedulePage } from "../model/schedule-page.model.js";
+import { ScheduleNotificationProducer } from "./schedule-notification.producer.js";
 
 
 @Injectable()
@@ -14,7 +15,8 @@ export class ScheduleService {
     constructor(
         private readonly scheduleRepository: ScheduleRepository,
         private readonly doctorRepository: DoctorRepository,
-        private readonly customerRepository: CustomerRepository
+        private readonly customerRepository: CustomerRepository,
+        private readonly notificationProducer: ScheduleNotificationProducer,
     ) {}
 
     async createSchedule(createScheduleInput: CreateScheduleInput): Promise<Schedule> {
@@ -30,7 +32,15 @@ export class ScheduleService {
             throw new Error(`Customer with ID ${createScheduleInput.customerId} not found.`);
         }
 
-        return this.scheduleRepository.createSchedule(createScheduleInput);
+        const schedule = await this.scheduleRepository.createSchedule(createScheduleInput);
+        await this.notificationProducer.enqueueEmail(
+            customer.email,
+            "Schedule created",
+            `Your schedule with ${doctor.name} for ${schedule.objective} is set for ${schedule.scheduledAt.toISOString()}.`,
+            `schedule-created-${schedule.id}`,
+        );
+
+        return schedule;
     }
 
     async getScheduleById(id: string): Promise<Schedule> {
@@ -44,7 +54,21 @@ export class ScheduleService {
     }
 
     async deleteSchedule(id: string): Promise<void> {
+        const schedule = await this.scheduleRepository.getScheduleById(id);
+        const customer = schedule
+            ? await this.customerRepository.getCustomerById(schedule.customerId)
+            : null;
+
         await this.scheduleRepository.deleteSchedule(id);
+
+        if (schedule && customer) {
+            await this.notificationProducer.enqueueEmail(
+                customer.email,
+                "Schedule deleted",
+                `Your schedule for ${schedule.objective} on ${schedule.scheduledAt.toISOString()} has been deleted.`,
+                `schedule-deleted-${schedule.id}`,
+            );
+        }
     }
 
     async getAllSchedules(paginationArgs: PaginationArgs, filterArgs: FilterArgs): Promise<SchedulePage> {

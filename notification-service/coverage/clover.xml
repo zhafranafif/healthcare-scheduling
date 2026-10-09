@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1791537060205" clover="3.2.0">
+  <project timestamp="1791537060205" name="All files">
+    <metrics statements="10" coveredstatements="10" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="3" elements="17" coveredelements="16" complexity="0" loc="10" ncloc="10" packages="1" files="1" classes="1"/>
+    <file name="notification.consumer.ts" path="C:\Users\hafizh\Documents\code\healthcare-scheduling\notification-service\src\notification.consumer.ts">
+      <metrics statements="10" coveredstatements="10" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="3"/>
+      <line num="6" count="1" type="cond" truecount="1" falsecount="1"/>
+      <line num="7" count="1" type="stmt"/>
+      <line num="10" count="3" type="stmt"/>
+      <line num="12" count="3" type="stmt"/>
+      <line num="16" count="3" type="cond" truecount="2" falsecount="0"/>
+      <line num="18" count="2" type="stmt"/>
+      <line num="19" count="1" type="stmt"/>
+      <line num="21" count="1" type="stmt"/>
+      <line num="26" count="2" type="stmt"/>
+      <line num="31" count="1" type="stmt"/>
+    </file>
+  </project>
+</coverage>

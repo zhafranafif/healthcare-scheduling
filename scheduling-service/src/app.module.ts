@@ -8,6 +8,7 @@ import { GqlAuthGuard } from './guard/gql-auth.guard.js';
 import { Request } from 'express';
 import { CustomerModule } from './customer/customer.module.js';
 import { DoctorModule } from './doctor/doctor.module.js';
+import { ScheduleModule } from './schedule/schedule.module.js';
 
 @Module({
   imports: [
@@ -20,9 +21,9 @@ import { DoctorModule } from './doctor/doctor.module.js';
     }),
     AuthModule,
     CustomerModule,
-    DoctorModule
+    DoctorModule,
+    ScheduleModule,
   ],
-  controllers: [],
   providers: [
     {
       provide: APP_GUARD,
