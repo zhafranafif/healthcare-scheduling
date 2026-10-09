@@ -1,7 +1,7 @@
 import { PrismaService } from "@healthcare-scheduling/database";
 import { Injectable } from "@nestjs/common";
-import { CreateUserData, UserRecord } from "./auth.repository.types.js";
-import { convertDate } from "../util/convert-date.js";
+import { CreateUserData, UserRecord } from "../types/auth.types.js";
+import { convertDate } from "../../util/convert-date.js";
 
 @Injectable()
 export class AuthRepository {

@@ -4,7 +4,7 @@ model User {
   id        String   @id @default(uuid())
   email     String   @unique
   password  String
-  createdAt DateTime @default(now())
+  createdAt temporal.createdAt()
   updatedAt temporal.updatedAt()
 
   @@map("users")
@@ -12,8 +12,9 @@ model User {
 
 model Customer {
   id        String   @id @default(uuid())
+  name      String
   email     String   @unique
-  createdAt DateTime @default(now())
+  createdAt temporal.createdAt()
   updatedAt temporal.updatedAt()
 
   schedules Schedule[]
@@ -24,7 +25,7 @@ model Customer {
 model Doctor {
   id        String   @id @default(uuid())
   name      String
-  createdAt DateTime @default(now())
+  createdAt temporal.createdAt()
   updatedAt temporal.updatedAt()
 
   schedules Schedule[]
@@ -38,7 +39,7 @@ model Schedule {
   customerId     String
   doctorId       String
   scheduledAt    DateTime
-  createdAt      DateTime @default(now())
+  createdAt      temporal.createdAt()
   updatedAt      temporal.updatedAt()
 
   customer Customer @relation(fields: [customerId], references: [id])

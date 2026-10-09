@@ -48,6 +48,13 @@
                   "kind": "scalar"
                 }
               },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "updatedAt": {
                 "nullable": false,
                 "type": {
@@ -83,6 +90,9 @@
                 },
                 "id": {
                   "column": "id"
+                },
+                "name": {
+                  "column": "name"
                 },
                 "updatedAt": {
                   "column": "updatedAt"
@@ -347,10 +357,6 @@
               "columns": {
                 "createdAt": {
                   "codecId": "pg/timestamptz-temporal@1",
-                  "default": {
-                    "expression": "now()",
-                    "kind": "function"
-                  },
                   "nativeType": "timestamptz",
                   "nullable": false
                 },
@@ -360,6 +366,11 @@
                   "nullable": false
                 },
                 "id": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "name": {
                   "codecId": "pg/text@1",
                   "nativeType": "text",
                   "nullable": false
@@ -389,10 +400,6 @@
               "columns": {
                 "createdAt": {
                   "codecId": "pg/timestamptz-temporal@1",
-                  "default": {
-                    "expression": "now()",
-                    "kind": "function"
-                  },
                   "nativeType": "timestamptz",
                   "nullable": false
                 },
@@ -425,10 +432,6 @@
               "columns": {
                 "createdAt": {
                   "codecId": "pg/timestamptz-temporal@1",
-                  "default": {
-                    "expression": "now()",
-                    "kind": "function"
-                  },
                   "nativeType": "timestamptz",
                   "nullable": false
                 },
@@ -533,10 +536,6 @@
               "columns": {
                 "createdAt": {
                   "codecId": "pg/timestamptz-temporal@1",
-                  "default": {
-                    "expression": "now()",
-                    "kind": "function"
-                  },
                   "nativeType": "timestamptz",
                   "nullable": false
                 },
@@ -582,14 +581,25 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "4558ed9da693878adac0fee3381564b909a0a6da98958196343c1904ae7da763"
+    "storageHash": "86d265c53cd9cf74065945d0540c5df8670d144fb71b4643c7e2e37b5f7c0a17"
   },
   "execution": {
-    "executionHash": "3cd59843efc146b9ce11a773be5cb1601bf5604b8e2cb0cd62e8d429dd84b927",
+    "executionHash": "d6591e214590da3876f01bcbf658ca62332b88fc99fdfb29555a0ad660527f8c",
     "mutations": {
       "defaults": [
         {
           "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "customers",
+            "field": "createdAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
             "id": "uuidv4",
             "kind": "generator"
           },
@@ -611,6 +621,17 @@
           "ref": {
             "entry": "customers",
             "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "doctors",
+            "field": "createdAt",
             "namespace": "public"
           }
         },
@@ -642,6 +663,17 @@
         },
         {
           "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "schedules",
+            "field": "createdAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
             "id": "uuidv4",
             "kind": "generator"
           },
@@ -663,6 +695,17 @@
           "ref": {
             "entry": "schedules",
             "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "users",
+            "field": "createdAt",
             "namespace": "public"
           }
         },

@@ -34,9 +34,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'86d265c53cd9cf74065945d0540c5df8670d144fb71b4643c7e2e37b5f7c0a17'>;
+  StorageHashBase<'0f73bde4eacd81ff8bc622b6d5c1556bc9d2086ad362521c77c57883dd30500e'>;
 export type ExecutionHash =
-  ExecutionHashBase<'d6591e214590da3876f01bcbf658ca62332b88fc99fdfb29555a0ad660527f8c'>;
+  ExecutionHashBase<'3cd59843efc146b9ce11a773be5cb1601bf5604b8e2cb0cd62e8d429dd84b927'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -454,6 +454,7 @@ type ContractBase = Omit<
                   readonly nativeType: 'timestamptz';
                   readonly codecId: 'pg/timestamptz-temporal@1';
                   readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
                 };
                 readonly email: {
                   readonly nativeType: 'text';
@@ -487,6 +488,7 @@ type ContractBase = Omit<
                   readonly nativeType: 'timestamptz';
                   readonly codecId: 'pg/timestamptz-temporal@1';
                   readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
                 };
                 readonly id: {
                   readonly nativeType: 'text';
@@ -515,6 +517,7 @@ type ContractBase = Omit<
                   readonly nativeType: 'timestamptz';
                   readonly codecId: 'pg/timestamptz-temporal@1';
                   readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
                 };
                 readonly customerId: {
                   readonly nativeType: 'text';
@@ -596,6 +599,7 @@ type ContractBase = Omit<
                   readonly nativeType: 'timestamptz';
                   readonly codecId: 'pg/timestamptz-temporal@1';
                   readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
                 };
                 readonly email: {
                   readonly nativeType: 'text';
@@ -898,14 +902,6 @@ type ContractBase = Omit<
     readonly mutations: {
       readonly defaults: readonly [
         {
-          readonly onCreate: { readonly id: 'instantNow'; readonly kind: 'generator' };
-          readonly ref: {
-            readonly entry: 'customers';
-            readonly field: 'createdAt';
-            readonly namespace: 'public';
-          };
-        },
-        {
           readonly onCreate: { readonly id: 'uuidv4'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'customers';
@@ -919,14 +915,6 @@ type ContractBase = Omit<
           readonly ref: {
             readonly entry: 'customers';
             readonly field: 'updatedAt';
-            readonly namespace: 'public';
-          };
-        },
-        {
-          readonly onCreate: { readonly id: 'instantNow'; readonly kind: 'generator' };
-          readonly ref: {
-            readonly entry: 'doctors';
-            readonly field: 'createdAt';
             readonly namespace: 'public';
           };
         },
@@ -948,14 +936,6 @@ type ContractBase = Omit<
           };
         },
         {
-          readonly onCreate: { readonly id: 'instantNow'; readonly kind: 'generator' };
-          readonly ref: {
-            readonly entry: 'schedules';
-            readonly field: 'createdAt';
-            readonly namespace: 'public';
-          };
-        },
-        {
           readonly onCreate: { readonly id: 'uuidv4'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'schedules';
@@ -969,14 +949,6 @@ type ContractBase = Omit<
           readonly ref: {
             readonly entry: 'schedules';
             readonly field: 'updatedAt';
-            readonly namespace: 'public';
-          };
-        },
-        {
-          readonly onCreate: { readonly id: 'instantNow'; readonly kind: 'generator' };
-          readonly ref: {
-            readonly entry: 'users';
-            readonly field: 'createdAt';
             readonly namespace: 'public';
           };
         },
