@@ -1,0 +1,463 @@
+[
+  {
+    "id": "schema.public",
+    "label": "Create schema \"public\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Create schema \"public\"",
+        "sql": "CREATE SCHEMA IF NOT EXISTS \"public\"",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.Customer",
+    "label": "Create table \"Customer\"",
+    "summary": "Creates table \"Customer\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Customer"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Customer\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Customer\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Customer\"",
+        "sql": "CREATE TABLE \"public\".\"Customer\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"email\" text NOT NULL,\n  \"id\" text NOT NULL,\n  \"updatedAt\" timestamptz DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Customer\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Customer\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.Doctor",
+    "label": "Create table \"Doctor\"",
+    "summary": "Creates table \"Doctor\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Doctor"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Doctor\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Doctor\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Doctor\"",
+        "sql": "CREATE TABLE \"public\".\"Doctor\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"name\" text NOT NULL,\n  \"updatedAt\" timestamptz DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Doctor\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Doctor\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.Schedule",
+    "label": "Create table \"Schedule\"",
+    "summary": "Creates table \"Schedule\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Schedule"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Schedule\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Schedule\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Schedule\"",
+        "sql": "CREATE TABLE \"public\".\"Schedule\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"customerId\" text NOT NULL,\n  \"doctorId\" text NOT NULL,\n  \"id\" text NOT NULL,\n  \"objective\" text NOT NULL,\n  \"scheduledAt\" timestamptz NOT NULL,\n  \"updatedAt\" timestamptz DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Schedule\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Schedule\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.User",
+    "label": "Create table \"User\"",
+    "summary": "Creates table \"User\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "User"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"User\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"User\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"User\"",
+        "sql": "CREATE TABLE \"public\".\"User\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"email\" text NOT NULL,\n  \"id\" text NOT NULL,\n  \"password\" text NOT NULL,\n  \"updatedAt\" timestamptz DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"User\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"User\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.Customer.Customer_email_key",
+    "label": "Add unique constraint on \"Customer\" (email)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "Customer_email_key",
+        "table": "Customer"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Customer_email_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Customer_email_key",
+          "public",
+          "\"public\".\"Customer\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"Customer_email_key\"",
+        "sql": "ALTER TABLE \"public\".\"Customer\" ADD CONSTRAINT \"Customer_email_key\" UNIQUE (\"email\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"Customer_email_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Customer_email_key",
+          "public",
+          "\"public\".\"Customer\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.Schedule.Schedule_doctorId_scheduledAt_key",
+    "label": "Add unique constraint on \"Schedule\" (doctorId, scheduledAt)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "Schedule_doctorId_scheduledAt_key",
+        "table": "Schedule"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Schedule_doctorId_scheduledAt_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Schedule_doctorId_scheduledAt_key",
+          "public",
+          "\"public\".\"Schedule\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"Schedule_doctorId_scheduledAt_key\"",
+        "sql": "ALTER TABLE \"public\".\"Schedule\" ADD CONSTRAINT \"Schedule_doctorId_scheduledAt_key\" UNIQUE (\"doctorId\", \"scheduledAt\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"Schedule_doctorId_scheduledAt_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Schedule_doctorId_scheduledAt_key",
+          "public",
+          "\"public\".\"Schedule\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.User.User_email_key",
+    "label": "Add unique constraint on \"User\" (email)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "User_email_key",
+        "table": "User"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"User_email_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "User_email_key",
+          "public",
+          "\"public\".\"User\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"User_email_key\"",
+        "sql": "ALTER TABLE \"public\".\"User\" ADD CONSTRAINT \"User_email_key\" UNIQUE (\"email\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"User_email_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "User_email_key",
+          "public",
+          "\"public\".\"User\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Schedule.Schedule_customerId_idx_b2a8a46c",
+    "label": "Create index \"Schedule_customerId_idx_b2a8a46c\" on \"Schedule\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Schedule_customerId_idx_b2a8a46c",
+        "table": "Schedule"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Schedule_customerId_idx_b2a8a46c\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Schedule_customerId_idx_b2a8a46c\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Schedule_customerId_idx_b2a8a46c\"",
+        "sql": "CREATE INDEX \"Schedule_customerId_idx_b2a8a46c\" ON \"public\".\"Schedule\" (\"customerId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Schedule_customerId_idx_b2a8a46c\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Schedule_customerId_idx_b2a8a46c\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Schedule.Schedule_doctorId_idx_04369053",
+    "label": "Create index \"Schedule_doctorId_idx_04369053\" on \"Schedule\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Schedule_doctorId_idx_04369053",
+        "table": "Schedule"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Schedule_doctorId_idx_04369053\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Schedule_doctorId_idx_04369053\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Schedule_doctorId_idx_04369053\"",
+        "sql": "CREATE INDEX \"Schedule_doctorId_idx_04369053\" ON \"public\".\"Schedule\" (\"doctorId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Schedule_doctorId_idx_04369053\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Schedule_doctorId_idx_04369053\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Schedule.Schedule_customerId_fkey",
+    "label": "Add foreign key \"Schedule_customerId_fkey\" on \"Schedule\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Schedule_customerId_fkey",
+        "table": "Schedule"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Schedule_customerId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Schedule_customerId_fkey",
+          "public",
+          "\"public\".\"Schedule\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Schedule_customerId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Schedule\"\nADD CONSTRAINT \"Schedule_customerId_fkey\"\nFOREIGN KEY (\"customerId\")\nREFERENCES \"public\".\"Customer\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Schedule_customerId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Schedule_customerId_fkey",
+          "public",
+          "\"public\".\"Schedule\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Schedule.Schedule_doctorId_fkey",
+    "label": "Add foreign key \"Schedule_doctorId_fkey\" on \"Schedule\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Schedule_doctorId_fkey",
+        "table": "Schedule"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Schedule_doctorId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Schedule_doctorId_fkey",
+          "public",
+          "\"public\".\"Schedule\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Schedule_doctorId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Schedule\"\nADD CONSTRAINT \"Schedule_doctorId_fkey\"\nFOREIGN KEY (\"doctorId\")\nREFERENCES \"public\".\"Doctor\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Schedule_doctorId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Schedule_doctorId_fkey",
+          "public",
+          "\"public\".\"Schedule\""
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,170 @@
+[
+  {
+    "id": "dropDefault.Customer.updatedAt",
+    "label": "Drop default on \"Customer\".\"updatedAt\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "updatedAt",
+        "table": "Customer"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"updatedAt\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Customer",
+          "updatedAt"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop default on \"updatedAt\"",
+        "sql": "ALTER TABLE \"public\".\"Customer\" ALTER COLUMN \"updatedAt\" DROP DEFAULT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"updatedAt\" has no default",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"column_default\" IS NULL)) AS \"result\"",
+        "params": [
+          "public",
+          "Customer",
+          "updatedAt"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropDefault.Doctor.updatedAt",
+    "label": "Drop default on \"Doctor\".\"updatedAt\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "updatedAt",
+        "table": "Doctor"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"updatedAt\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Doctor",
+          "updatedAt"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop default on \"updatedAt\"",
+        "sql": "ALTER TABLE \"public\".\"Doctor\" ALTER COLUMN \"updatedAt\" DROP DEFAULT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"updatedAt\" has no default",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"column_default\" IS NULL)) AS \"result\"",
+        "params": [
+          "public",
+          "Doctor",
+          "updatedAt"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropDefault.Schedule.updatedAt",
+    "label": "Drop default on \"Schedule\".\"updatedAt\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "updatedAt",
+        "table": "Schedule"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"updatedAt\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Schedule",
+          "updatedAt"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop default on \"updatedAt\"",
+        "sql": "ALTER TABLE \"public\".\"Schedule\" ALTER COLUMN \"updatedAt\" DROP DEFAULT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"updatedAt\" has no default",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"column_default\" IS NULL)) AS \"result\"",
+        "params": [
+          "public",
+          "Schedule",
+          "updatedAt"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropDefault.User.updatedAt",
+    "label": "Drop default on \"User\".\"updatedAt\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "updatedAt",
+        "table": "User"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"updatedAt\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "User",
+          "updatedAt"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop default on \"updatedAt\"",
+        "sql": "ALTER TABLE \"public\".\"User\" ALTER COLUMN \"updatedAt\" DROP DEFAULT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"updatedAt\" has no default",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"column_default\" IS NULL)) AS \"result\"",
+        "params": [
+          "public",
+          "User",
+          "updatedAt"
+        ]
+      }
+    ]
+  }
+]

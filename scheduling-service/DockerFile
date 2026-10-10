@@ -1,0 +1,37 @@
+FROM node:24-alpine AS build
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+COPY scheduling-service/package.json ./scheduling-service/package.json
+COPY packages/database/package.json ./packages/database/package.json
+
+RUN npm ci
+
+COPY packages/database ./packages/database
+COPY scheduling-service ./scheduling-service
+
+RUN npm run build --workspace=@healthcare-scheduling/database \
+	&& npm run build --workspace=scheduling-service \
+	&& npm pack --workspace=@healthcare-scheduling/database --pack-destination /tmp \
+	&& npm pack --workspace=scheduling-service --pack-destination /tmp
+
+FROM node:24-alpine
+
+WORKDIR /app
+
+COPY --from=build /tmp/*.tgz /tmp/
+
+RUN npm init --yes \
+	&& npm install --omit=dev /tmp/*.tgz \
+	&& rm -rf /root/.npm /tmp/*.tgz
+
+COPY --from=build /app/packages/database/dist ./packages/database/dist
+COPY --from=build /app/scheduling-service/package.json ./scheduling-service/package.json
+COPY --from=build /app/scheduling-service/dist ./scheduling-service/dist
+
+USER node
+
+EXPOSE 3002
+
+CMD ["node", "scheduling-service/dist/main.js"]

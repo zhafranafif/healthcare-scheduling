@@ -1,0 +1,114 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateCustomerInput {
+  email: String!
+  name: String!
+}
+
+input CreateDoctorInput {
+  name: String!
+}
+
+input CreateScheduleInput {
+  customerId: String!
+  doctorId: String!
+  objective: String!
+  scheduledAt: DateTime!
+}
+
+type Customer {
+  createdAt: DateTime!
+  email: String!
+  id: String!
+  name: String!
+  updatedAt: DateTime!
+}
+
+type CustomerPage {
+  data: [Customer!]!
+  meta: CustomerPageMeta!
+}
+
+type CustomerPageMeta {
+  limit: Int!
+  page: Int!
+  total: Int!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Doctor {
+  createdAt: DateTime!
+  id: String!
+  name: String!
+  updatedAt: DateTime!
+}
+
+type DoctorPage {
+  data: [Doctor!]!
+  meta: DoctorPageMeta!
+}
+
+type DoctorPageMeta {
+  limit: Int!
+  page: Int!
+  total: Int!
+}
+
+type Mutation {
+  createCustomer(createCustomerInput: CreateCustomerInput!): Customer!
+  createDoctor(createDoctorInput: CreateDoctorInput!): Doctor!
+  createSchedule(createScheduleInput: CreateScheduleInput!): Schedule!
+  deleteCustomer(id: String!): Boolean!
+  deleteDoctor(id: String!): Boolean!
+  deleteSchedule(id: String!): Boolean!
+  updateCustomer(updateCustomerInput: UpdateCustomerInput!): Customer!
+  updateDoctor(updateDoctorInput: UpdateDoctorInput!): Doctor!
+}
+
+type Query {
+  getAllCustomers(limit: Int, page: Int): CustomerPage!
+  getAllDoctors(limit: Int, page: Int): DoctorPage!
+  getAllSchedules(customerId: String, doctorId: String, limit: Int, objective: String, page: Int, scheduledFrom: DateTime, scheduledTo: DateTime): SchedulePage!
+  getCustomerById(id: String!): Customer!
+  getDoctorById(id: String!): Doctor!
+  getHello: String!
+  getScheduleById(id: String!): Schedule!
+}
+
+type Schedule {
+  createdAt: DateTime!
+  customerId: String!
+  doctorId: String!
+  id: String!
+  objective: String!
+  scheduledAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type SchedulePage {
+  data: [Schedule!]!
+  meta: SchedulePageMeta!
+}
+
+type SchedulePageMeta {
+  limit: Int!
+  page: Int!
+  total: Int!
+}
+
+input UpdateCustomerInput {
+  email: String
+  id: String!
+  name: String
+}
+
+input UpdateDoctorInput {
+  id: String!
+  name: String!
+}

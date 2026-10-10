@@ -1,0 +1,97 @@
+services:
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/DockerFile
+    container_name: auth-service
+    env_file:
+      - ./auth-service/.env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres-db:5432/${POSTGRES_DB:-healthcare_scheduling}?schema=public
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+    ports:
+      - "3001:3001"
+    networks:
+      - healthcare-scheduling-network
+
+  scheduling-service:
+    build:
+      context: .
+      dockerfile: scheduling-service/DockerFile
+    container_name: scheduling-service
+    env_file:
+      - ./scheduling-service/.env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres-db:5432/${POSTGRES_DB:-healthcare_scheduling}?schema=public
+      AUTH_SERVICE_URL: http://auth-service:3001/graphql
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "3002:3002"
+    networks:
+      - healthcare-scheduling-network
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: notification-service/DockerFile
+    container_name: notification-service
+    env_file:
+      - ./notification-service/.env
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - healthcare-scheduling-network
+
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-healthcare_scheduling}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - healthcare-scheduling-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: healthcare-redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - healthcare-scheduling-network
+
+networks:
+  healthcare-scheduling-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:

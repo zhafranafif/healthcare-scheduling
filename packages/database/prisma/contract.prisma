@@ -1,0 +1,50 @@
+// use prisma-8
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  createdAt temporal.createdAt()
+  updatedAt temporal.updatedAt()
+
+  @@map("users")
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  createdAt temporal.createdAt()
+  updatedAt temporal.updatedAt()
+
+  schedules Schedule[]
+
+  @@map("customers")
+}
+
+model Doctor {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt temporal.createdAt()
+  updatedAt temporal.updatedAt()
+
+  schedules Schedule[]
+
+  @@map("doctors")
+}
+
+model Schedule {
+  id             String   @id @default(uuid())
+  objective      String
+  customerId     String
+  doctorId       String
+  scheduledAt    DateTime
+  createdAt      temporal.createdAt()
+  updatedAt      temporal.updatedAt()
+
+  customer Customer @relation(fields: [customerId], references: [id])
+  doctor   Doctor   @relation(fields: [doctorId], references: [id])
+
+  @@unique([doctorId, scheduledAt])
+  @@map("schedules")
+}
