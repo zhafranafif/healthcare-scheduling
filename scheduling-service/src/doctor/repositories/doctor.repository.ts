@@ -60,7 +60,7 @@ export class DoctorRepository {
     }
 
     async getAllDoctors(paginationArgs: PaginationArgs): Promise<{ data: DoctorRecord[]; meta: DoctorPageMeta }> {
-        const doctors = await this.prisma.orm.Doctor
+        const doctors = await this.prisma.orm.Doctor.orderBy((p) => p.createdAt.desc())
         .offset(((paginationArgs.page || 1) - 1) * (paginationArgs.limit || 10))
         .limit(paginationArgs.limit || 10)
         .all();

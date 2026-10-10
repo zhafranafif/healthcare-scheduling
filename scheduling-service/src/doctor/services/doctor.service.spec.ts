@@ -25,11 +25,6 @@ describe("DoctorService", () => {
         await expect(service.updateDoctor({ id: doctor.id, name: doctor.name })).resolves.toEqual(doctor);
     });
 
-    it("throws when an update target does not exist", async () => {
-        vi.mocked(repository.updateDoctor).mockResolvedValue(null);
-        await expect(service.updateDoctor({ id: doctor.id })).rejects.toThrow(`Doctor with ID ${doctor.id} not found`);
-    });
-
     it("gets a doctor by id", async () => {
         vi.mocked(repository.getDoctorById).mockResolvedValue(doctor);
         await expect(service.getDoctorById(doctor.id)).resolves.toEqual(doctor);

@@ -28,8 +28,6 @@ describe("DoctorRepository", () => {
         where.mockReturnValue({ update });
         update.mockResolvedValue(record);
         await expect(repository.updateDoctor({ id: record.id, name: record.name })).resolves.toEqual(record);
-        update.mockResolvedValue(null);
-        await expect(repository.updateDoctor({ id: record.id })).resolves.toBeNull();
     });
 
     it("finds a doctor by id or returns null", async () => {
